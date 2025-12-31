@@ -19,6 +19,9 @@
             min-height: 100vh;
             overflow-x: hidden;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         /* Fireworks Canvas */
@@ -40,11 +43,9 @@
             padding: 1.5rem;
             background: rgba(0, 0, 0, 0.7);
             border-radius: 15px;
-            box-shadow: 
-                0 0 20px rgba(255, 105, 180, 0.2);
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.2);
             max-width: 800px;
             width: 100%;
-            margin: 0 auto;
             border: 1px solid rgba(255, 105, 180, 0.1);
         }
         
@@ -85,7 +86,7 @@
             margin-right: auto;
         }
         
-        /* Polaroid Photos Grid - FIXED LAYOUT (always 3x2) */
+        /* Polaroid Photos Grid - FIXED FOR MOBILE */
         .polaroid-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -98,8 +99,7 @@
             position: relative;
             background: white;
             padding: 10px 10px 35px;
-            box-shadow: 
-                0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
             height: 180px;
             display: flex;
@@ -118,9 +118,8 @@
         
         .polaroid:hover {
             transform: translateY(-5px) !important;
-            box-shadow: 
-                0 10px 20px rgba(0, 0, 0, 0.4),
-                0 0 15px rgba(255, 105, 180, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4),
+                        0 0 15px rgba(255, 105, 180, 0.2);
         }
         
         .polaroid-image {
@@ -171,8 +170,7 @@
             font-weight: 600;
             background: linear-gradient(45deg, #ff69b4, #ff1493);
             color: white;
-            box-shadow: 
-                0 5px 15px rgba(255, 105, 180, 0.25);
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -184,8 +182,7 @@
         
         .read-message-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 
-                0 8px 20px rgba(255, 105, 180, 0.35);
+            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.35);
         }
         
         .read-message-btn i {
@@ -233,8 +230,7 @@
             max-width: 500px;
             max-height: 85vh;
             border-radius: 15px;
-            box-shadow: 
-                0 15px 35px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
             position: relative;
             transform: scale(0.95) translateY(20px);
             opacity: 0;
@@ -327,88 +323,34 @@
             font-weight: 600;
         }
         
-        /* SCROLLING FOR MOBILE - Layout stays 3x2 always */
-        /* On very small screens, we'll make the grid scrollable horizontally */
-        .polaroid-grid-wrapper {
-            overflow-x: auto;
-            padding-bottom: 10px;
-            margin: 1.5rem 0;
-        }
-        
-        .polaroid-grid-wrapper::-webkit-scrollbar {
-            height: 6px;
-        }
-        
-        .polaroid-grid-wrapper::-webkit-scrollbar-track {
-            background: rgba(255, 105, 180, 0.1);
-            border-radius: 10px;
-        }
-        
-        .polaroid-grid-wrapper::-webkit-scrollbar-thumb {
-            background: linear-gradient(to right, #ff69b4, #ff1493);
-            border-radius: 10px;
-        }
-        
-        /* FIXED SIZES - layout doesn't change */
-        /* For mobile, we'll keep the same grid but allow horizontal scrolling if needed */
-        @media (max-width: 600px) {
+        /* MOBILE-FIXED RESPONSIVE STYLES */
+        /* For tablets and smaller desktops */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
             .container {
-                padding: 1rem;
+                padding: 1.2rem;
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             
             .year {
-                font-size: 2.8rem;
-            }
-            
-            .message {
-                font-size: 1rem;
+                font-size: 3rem;
             }
             
             .polaroid-grid {
-                display: grid;
-                grid-template-columns: repeat(3, 150px);
+                grid-template-columns: repeat(3, 1fr);
                 gap: 0.8rem;
-                justify-content: center;
-                width: max-content;
-                margin: 1rem auto;
-            }
-            
-            .polaroid {
-                height: 180px;
-                width: 150px;
-                padding: 8px 8px 30px;
-            }
-            
-            .polaroid-image {
-                height: 120px;
-            }
-            
-            .polaroid-caption {
-                font-size: 0.75rem;
-            }
-            
-            /* Center the grid on mobile */
-            .container {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-        
-        /* For very small screens */
-        @media (max-width: 400px) {
-            .polaroid-grid {
-                grid-template-columns: repeat(3, 130px);
-                gap: 0.6rem;
+                max-width: 100%;
             }
             
             .polaroid {
                 height: 160px;
-                width: 130px;
+                padding: 8px 8px 30px;
             }
             
             .polaroid-image {
@@ -416,7 +358,72 @@
             }
             
             .polaroid-caption {
+                font-size: 0.75rem;
+            }
+        }
+        
+        /* For mobile phones */
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .year {
+                font-size: 2.5rem;
+            }
+            
+            .message {
+                font-size: 1rem;
+            }
+            
+            /* FIXED: This ensures photos don't overlap on mobile */
+            .polaroid-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 0.6rem;
+                width: 100%;
+            }
+            
+            .polaroid {
+                height: 140px;
+                padding: 6px 6px 25px;
+                width: 100%;
+            }
+            
+            .polaroid-image {
+                height: 90px;
+            }
+            
+            .polaroid-caption {
                 font-size: 0.7rem;
+                margin-top: 5px;
+            }
+            
+            .read-message-btn {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* For very small phones */
+        @media (max-width: 360px) {
+            .polaroid {
+                height: 130px;
+            }
+            
+            .polaroid-image {
+                height: 85px;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .year {
+                font-size: 2.2rem;
             }
         }
     </style>
@@ -430,62 +437,60 @@
         <h1>Happy New Year, My Love</h1>
         <div class="year" id="currentYear">2025</div>
         
-        <!-- Polaroid Photos Grid - Always 3x2 layout -->
-        <div class="polaroid-grid-wrapper">
-            <div class="polaroid-grid">
-                <!-- Polaroid 1 -->
-                <div class="polaroid" id="polaroid1">
-                    <div class="polaroid-image">
-                        <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
-                        <img src="5.jpg" alt="Our Memory 1">
-                    </div>
-                    <div class="polaroid-caption">Our First Date</div>
+        <!-- Polaroid Photos Grid - NOW FIXED FOR MOBILE -->
+        <div class="polaroid-grid">
+            <!-- Polaroid 1 -->
+            <div class="polaroid" id="polaroid1">
+                <div class="polaroid-image">
+                    <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
+                    <img src="5.jpg" alt="Our Memory 1">
                 </div>
-                
-                <!-- Polaroid 2 -->
-                <div class="polaroid" id="polaroid2">
-                    <div class="polaroid-image">
-                        <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
-                        <img src="2.jpg" alt="Our Memory 2">
-                    </div>
-                    <div class="polaroid-caption">First Date Travelling</div>
+                <div class="polaroid-caption">Our First Date</div>
+            </div>
+            
+            <!-- Polaroid 2 -->
+            <div class="polaroid" id="polaroid2">
+                <div class="polaroid-image">
+                    <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
+                    <img src="2.jpg" alt="Our Memory 2">
                 </div>
-                
-                <!-- Polaroid 3 -->
-                <div class="polaroid" id="polaroid3">
-                    <div class="polaroid-image">
-                        <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
-                        <img src="3.jpg" alt="Our Memory 3">
-                    </div>
-                    <div class="polaroid-caption">Cuties</div>
+                <div class="polaroid-caption">First Travel Date</div>
+            </div>
+            
+            <!-- Polaroid 3 -->
+            <div class="polaroid" id="polaroid3">
+                <div class="polaroid-image">
+                    <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
+                    <img src="3.jpg" alt="Our Memory 3">
                 </div>
-                
-                <!-- Polaroid 4 -->
-                <div class="polaroid" id="polaroid4">
-                    <div class="polaroid-image">
-                        <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
-                        <img src="6.jpg" alt="Our Memory 4">
-                    </div>
-                    <div class="polaroid-caption">Smile</div>
+                <div class="polaroid-caption">Cuties</div>
+            </div>
+            
+            <!-- Polaroid 4 -->
+            <div class="polaroid" id="polaroid4">
+                <div class="polaroid-image">
+                    <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
+                    <img src="6.jpg" alt="Our Memory 4">
                 </div>
-                
-                <!-- Polaroid 5 -->
-                <div class="polaroid" id="polaroid5">
-                    <div class="polaroid-image">
-                        <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
-                        <img src="1.jpg" alt="Our Memory 5">
-                    </div>
-                    <div class="polaroid-caption">Mwaa</div>
+                <div class="polaroid-caption">Smile</div>
+            </div>
+            
+            <!-- Polaroid 5 -->
+            <div class="polaroid" id="polaroid5">
+                <div class="polaroid-image">
+                    <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
+                    <img src="1.jpg" alt="Our Memory 5">
                 </div>
-                
-                <!-- Polaroid 6 -->
-                <div class="polaroid" id="polaroid6">
-                    <div class="polaroid-image">
-                        <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
-                        <img src="4.jpg" alt="Our Memory 6">
-                    </div>
-                    <div class="polaroid-caption">Forever Us</div>
+                <div class="polaroid-caption">Mwaa</div>
+            </div>
+            
+            <!-- Polaroid 6 -->
+            <div class="polaroid" id="polaroid6">
+                <div class="polaroid-image">
+                    <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
+                    <img src="4.jpg" alt="Our Memory 6">
                 </div>
+                <div class="polaroid-caption">Forever Us</div>
             </div>
         </div>
         
@@ -538,7 +543,7 @@
 
     <script>
         // ====================
-        // OPTIMIZED FIREWORKS FOR MOBILE
+        // OPTIMIZED FIREWORKS
         // ====================
         
         // Get canvas and context
@@ -762,11 +767,6 @@
                 modalOverlay.classList.remove('active');
                 document.body.style.overflow = 'auto';
             }
-        });
-        
-        // Touch event for mobile
-        document.addEventListener('touchstart', () => {
-            // Optional: add subtle touch feedback
         });
     </script>
 </body>
