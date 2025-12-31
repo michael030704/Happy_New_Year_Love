@@ -21,8 +21,8 @@
             padding: 20px;
         }
         
-        /* Simplified Fireworks */
-        #fireworksContainer {
+        /* Fireworks Canvas */
+        #fireworksCanvas {
             position: fixed;
             top: 0;
             left: 0;
@@ -30,16 +30,6 @@
             height: 100%;
             pointer-events: none;
             z-index: 1;
-            overflow: hidden;
-        }
-        
-        .firework {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0;
         }
         
         /* Main container */
@@ -95,10 +85,10 @@
             margin-right: auto;
         }
         
-        /* Simplified Polaroid Photos Grid */
+        /* Polaroid Photos Grid - FIXED LAYOUT (always 3x2) */
         .polaroid-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
             margin: 1.5rem auto;
             max-width: 600px;
@@ -111,16 +101,23 @@
             box-shadow: 
                 0 5px 15px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
-            height: 250px;
+            height: 180px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             border-radius: 2px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .polaroid.show {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .polaroid:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) !important;
             box-shadow: 
                 0 10px 20px rgba(0, 0, 0, 0.4),
                 0 0 15px rgba(255, 105, 180, 0.2);
@@ -128,7 +125,7 @@
         
         .polaroid-image {
             width: 100%;
-            height: 170px;
+            height: 120px;
             overflow: hidden;
             background: #f5f5f5;
             display: flex;
@@ -145,9 +142,9 @@
         .polaroid-caption {
             font-family: 'Courier New', monospace;
             color: #333;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             text-align: center;
-            margin-top: 10px;
+            margin-top: 8px;
             font-weight: 600;
             padding: 0 5px;
         }
@@ -158,7 +155,7 @@
             pointer-events: none;
             z-index: 2;
             opacity: 0;
-            font-size: 20px;
+            font-size: 18px;
             color: #ff69b4;
             filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.6));
         }
@@ -189,6 +186,15 @@
             transform: translateY(-3px);
             box-shadow: 
                 0 8px 20px rgba(255, 105, 180, 0.35);
+        }
+        
+        .read-message-btn i {
+            animation: heartBeat 2s infinite;
+        }
+        
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
         
         .signature {
@@ -321,39 +327,35 @@
             font-weight: 600;
         }
         
-        /* Responsive design */
-        @media (min-width: 768px) {
-            .container {
-                padding: 2rem;
-            }
-            
-            h1 {
-                font-size: 3rem;
-            }
-            
-            .year {
-                font-size: 4rem;
-            }
-            
-            .message {
-                font-size: 1.2rem;
-            }
-            
-            .polaroid-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 1.5rem;
-            }
-            
-            .polaroid {
-                height: 280px;
-            }
-            
-            .polaroid-image {
-                height: 200px;
-            }
+        /* SCROLLING FOR MOBILE - Layout stays 3x2 always */
+        /* On very small screens, we'll make the grid scrollable horizontally */
+        .polaroid-grid-wrapper {
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin: 1.5rem 0;
         }
         
-        @media (max-width: 480px) {
+        .polaroid-grid-wrapper::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .polaroid-grid-wrapper::-webkit-scrollbar-track {
+            background: rgba(255, 105, 180, 0.1);
+            border-radius: 10px;
+        }
+        
+        .polaroid-grid-wrapper::-webkit-scrollbar-thumb {
+            background: linear-gradient(to right, #ff69b4, #ff1493);
+            border-radius: 10px;
+        }
+        
+        /* FIXED SIZES - layout doesn't change */
+        /* For mobile, we'll keep the same grid but allow horizontal scrolling if needed */
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+            
             h1 {
                 font-size: 2rem;
             }
@@ -362,84 +364,128 @@
                 font-size: 2.8rem;
             }
             
+            .message {
+                font-size: 1rem;
+            }
+            
             .polaroid-grid {
-                grid-template-columns: 1fr;
-                max-width: 300px;
+                display: grid;
+                grid-template-columns: repeat(3, 150px);
+                gap: 0.8rem;
+                justify-content: center;
+                width: max-content;
+                margin: 1rem auto;
             }
             
             .polaroid {
-                height: 250px;
+                height: 180px;
+                width: 150px;
+                padding: 8px 8px 30px;
             }
             
             .polaroid-image {
-                height: 180px;
+                height: 120px;
+            }
+            
+            .polaroid-caption {
+                font-size: 0.75rem;
+            }
+            
+            /* Center the grid on mobile */
+            .container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        /* For very small screens */
+        @media (max-width: 400px) {
+            .polaroid-grid {
+                grid-template-columns: repeat(3, 130px);
+                gap: 0.6rem;
+            }
+            
+            .polaroid {
+                height: 160px;
+                width: 130px;
+            }
+            
+            .polaroid-image {
+                height: 100px;
+            }
+            
+            .polaroid-caption {
+                font-size: 0.7rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Simple Fireworks Container -->
-    <div id="fireworksContainer"></div>
+    <!-- Fireworks Canvas -->
+    <canvas id="fireworksCanvas"></canvas>
     
     <!-- Main Content -->
     <div class="container">
         <h1>Happy New Year, My Love</h1>
         <div class="year" id="currentYear">2025</div>
         
-        <!-- Polaroid Photos Grid -->
-        <div class="polaroid-grid">
-            <!-- Polaroid 1 -->
-            <div class="polaroid" id="polaroid1">
-                <div class="polaroid-image">
-                    <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
-                    <img src="5.jpg" alt="Our Memory 1">
+        <!-- Polaroid Photos Grid - Always 3x2 layout -->
+        <div class="polaroid-grid-wrapper">
+            <div class="polaroid-grid">
+                <!-- Polaroid 1 -->
+                <div class="polaroid" id="polaroid1">
+                    <div class="polaroid-image">
+                        <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
+                        <img src="5.jpg" alt="Our Memory 1">
+                    </div>
+                    <div class="polaroid-caption">Our First Date</div>
                 </div>
-                <div class="polaroid-caption">Our First Date</div>
-            </div>
-            
-            <!-- Polaroid 2 -->
-            <div class="polaroid" id="polaroid2">
-                <div class="polaroid-image">
-                    <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
-                    <img src="2.jpg" alt="Our Memory 2">
+                
+                <!-- Polaroid 2 -->
+                <div class="polaroid" id="polaroid2">
+                    <div class="polaroid-image">
+                        <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
+                        <img src="2.jpg" alt="Our Memory 2">
+                    </div>
+                    <div class="polaroid-caption">First Date Travelling</div>
                 </div>
-                <div class="polaroid-caption">First Date Travelling</div>
-            </div>
-            
-            <!-- Polaroid 3 -->
-            <div class="polaroid" id="polaroid3">
-                <div class="polaroid-image">
-                    <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
-                    <img src="3.jpg" alt="Our Memory 3">
+                
+                <!-- Polaroid 3 -->
+                <div class="polaroid" id="polaroid3">
+                    <div class="polaroid-image">
+                        <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
+                        <img src="3.jpg" alt="Our Memory 3">
+                    </div>
+                    <div class="polaroid-caption">Cuties</div>
                 </div>
-                <div class="polaroid-caption">Cuties</div>
-            </div>
-            
-            <!-- Polaroid 4 -->
-            <div class="polaroid" id="polaroid4">
-                <div class="polaroid-image">
-                    <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
-                    <img src="6.jpg" alt="Our Memory 4">
+                
+                <!-- Polaroid 4 -->
+                <div class="polaroid" id="polaroid4">
+                    <div class="polaroid-image">
+                        <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
+                        <img src="6.jpg" alt="Our Memory 4">
+                    </div>
+                    <div class="polaroid-caption">Smile</div>
                 </div>
-                <div class="polaroid-caption">Smile</div>
-            </div>
-            
-            <!-- Polaroid 5 -->
-            <div class="polaroid" id="polaroid5">
-                <div class="polaroid-image">
-                    <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
-                    <img src="1.jpg" alt="Our Memory 5">
+                
+                <!-- Polaroid 5 -->
+                <div class="polaroid" id="polaroid5">
+                    <div class="polaroid-image">
+                        <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
+                        <img src="1.jpg" alt="Our Memory 5">
+                    </div>
+                    <div class="polaroid-caption">Mwaa</div>
                 </div>
-                <div class="polaroid-caption">Mwaa</div>
-            </div>
-            
-            <!-- Polaroid 6 -->
-            <div class="polaroid" id="polaroid6">
-                <div class="polaroid-image">
-                    <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
-                    <img src="4.jpg" alt="Our Memory 6">
+                
+                <!-- Polaroid 6 -->
+                <div class="polaroid" id="polaroid6">
+                    <div class="polaroid-image">
+                        <!-- REPLACE THIS IMAGE URL WITH YOUR PHOTO -->
+                        <img src="4.jpg" alt="Our Memory 6">
+                    </div>
+                    <div class="polaroid-caption">Forever Us</div>
                 </div>
-                <div class="polaroid-caption">Forever Us</div>
             </div>
         </div>
         
@@ -491,189 +537,186 @@
     </div>
 
     <script>
+        // ====================
+        // OPTIMIZED FIREWORKS FOR MOBILE
+        // ====================
+        
+        // Get canvas and context
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas dimensions
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
         // Set current year
         const currentYearElement = document.getElementById('currentYear');
         const currentYear = new Date().getFullYear() + 1;
         currentYearElement.textContent = currentYear;
         
-        // Simplified fireworks effect
-        const fireworksContainer = document.getElementById('fireworksContainer');
-        const colors = ['#ff69b4', '#ff1493', '#ff6bc9', '#ff8ed4'];
+        // Check if mobile for performance tuning
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         
-        function createFirework(x, y) {
-            // Create main firework
-            const firework = document.createElement('div');
-            firework.className = 'firework';
-            firework.style.left = x + 'px';
-            firework.style.top = y + 'px';
-            firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            
-            // Add to container
-            fireworksContainer.appendChild(firework);
-            
-            // Animate firework
-            const duration = 1000 + Math.random() * 1000;
-            
-            // Launch up
-            firework.animate([
-                { 
-                    transform: 'translateY(0) scale(1)', 
-                    opacity: 1 
-                },
-                { 
-                    transform: 'translateY(-40px) scale(1.2)', 
-                    opacity: 0.8 
-                }
-            ], {
-                duration: duration * 0.3,
-                easing: 'ease-out'
-            });
-            
-            // Explode after launch
-            setTimeout(() => {
-                // Remove the launching firework
-                firework.remove();
-                
-                // Create explosion particles
-                const particleCount = 8 + Math.floor(Math.random() * 8);
-                for (let i = 0; i < particleCount; i++) {
-                    createParticle(x, y);
-                }
-            }, duration * 0.3);
-        }
+        // Arrays for particles
+        let particles = [];
         
-        function createParticle(x, y) {
-            const particle = document.createElement('div');
-            particle.className = 'firework';
-            particle.style.left = x + 'px';
-            particle.style.top = y + 'px';
-            particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            particle.style.width = '3px';
-            particle.style.height = '3px';
-            
-            fireworksContainer.appendChild(particle);
-            
-            // Random direction
-            const angle = Math.random() * Math.PI * 2;
-            const speed = 1 + Math.random() * 2;
-            const distance = 30 + Math.random() * 40;
-            
-            const vx = Math.cos(angle) * speed;
-            const vy = Math.sin(angle) * speed;
-            
-            // Animate particle
-            let currentX = 0;
-            let currentY = 0;
-            let opacity = 1;
-            
-            function animateParticle() {
-                currentX += vx;
-                currentY += vy;
-                opacity -= 0.02;
-                
-                particle.style.transform = `translate(${currentX}px, ${currentY}px)`;
-                particle.style.opacity = opacity;
-                
-                // Continue animation or remove
-                if (opacity > 0 && 
-                    Math.abs(currentX) < distance && 
-                    Math.abs(currentY) < distance) {
-                    requestAnimationFrame(animateParticle);
-                } else {
-                    particle.remove();
-                }
+        // Romantic colors for fireworks
+        const romanticColors = ['#ff69b4', '#ff1493', '#ff6bc9', '#ff8ed4'];
+        
+        // Simple Particle class
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+                this.life = 50 + Math.random() * 50;
             }
             
-            requestAnimationFrame(animateParticle);
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.size *= 0.99;
+                this.life--;
+                return this.life > 0;
+            }
+            
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.life / 100;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
         }
         
-        // Simple hearts effect
+        // Create a firework explosion
+        function createFirework(x, y) {
+            const color = romanticColors[Math.floor(Math.random() * romanticColors.length)];
+            const particleCount = isMobile ? 30 : 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+            
+            // Create a heart sometimes (30% chance)
+            if (Math.random() < 0.3) {
+                createHeart(x, y);
+            }
+        }
+        
+        // Create floating hearts
         function createHeart(x, y) {
             const heart = document.createElement('div');
             heart.className = 'heart';
             heart.innerHTML = '❤';
             heart.style.left = x + 'px';
             heart.style.top = y + 'px';
-            heart.style.fontSize = (15 + Math.random() * 20) + 'px';
-            heart.style.color = colors[Math.floor(Math.random() * 2)];
+            heart.style.color = romanticColors[Math.floor(Math.random() * 2)];
+            heart.style.fontSize = (15 + Math.random() * 15) + 'px';
             
             document.body.appendChild(heart);
             
-            // Animate heart
-            const startX = x;
-            const startY = y;
-            let progress = 0;
-            const duration = 2000 + Math.random() * 2000;
-            const speed = 0.5 + Math.random() * 0.5;
-            const drift = (Math.random() - 0.5) * 2;
+            // Animation
+            let opacity = 1;
+            let posY = y;
+            let posX = x;
+            const speedY = -1 - Math.random() * 1;
+            const speedX = (Math.random() - 0.5) * 1;
             
-            function animateHeart(timestamp) {
-                if (!startTime) startTime = timestamp;
-                const elapsed = timestamp - startTime;
-                progress = elapsed / duration;
+            function animateHeart() {
+                opacity -= 0.01;
+                posY += speedY;
+                posX += speedX;
                 
-                if (progress < 1) {
-                    // Move upward with slight drift
-                    const newX = startX + drift * elapsed / 10;
-                    const newY = startY - speed * elapsed;
-                    
-                    heart.style.left = newX + 'px';
-                    heart.style.top = newY + 'px';
-                    heart.style.opacity = 1 - progress;
-                    
+                heart.style.opacity = opacity;
+                heart.style.top = posY + 'px';
+                heart.style.left = posX + 'px';
+                
+                if (opacity > 0) {
                     requestAnimationFrame(animateHeart);
                 } else {
                     heart.remove();
                 }
             }
             
-            let startTime;
             requestAnimationFrame(animateHeart);
         }
         
-        // Launch fireworks periodically (less frequent)
-        function launchRandomFirework() {
-            const x = Math.random() * window.innerWidth;
-            const y = window.innerHeight + 20;
+        // Animation loop
+        function animate() {
+            // Clear with fade effect
+            ctx.fillStyle = 'rgba(12, 12, 46, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Update and draw particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                if (particles[i].update()) {
+                    particles[i].draw();
+                } else {
+                    particles.splice(i, 1);
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        
+        // Start animation
+        animate();
+        
+        // Launch fireworks at random positions
+        function launchFirework() {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height * 0.7;
             createFirework(x, y);
         }
         
-        // Create hearts periodically (less frequent)
-        function createRandomHeart() {
-            const x = Math.random() * window.innerWidth;
-            const y = window.innerHeight + 20;
-            createHeart(x, y);
-        }
-        
-        // Initialize with a few effects
+        // Initial fireworks
         setTimeout(() => {
-            // Initial fireworks
-            for (let i = 0; i < 2; i++) {
-                setTimeout(() => {
-                    launchRandomFirework();
-                }, i * 500);
-            }
-            
-            // Initial hearts
             for (let i = 0; i < 3; i++) {
-                setTimeout(() => {
-                    createRandomHeart();
-                }, i * 700);
+                setTimeout(launchFirework, i * 500);
             }
         }, 1000);
         
-        // Periodic effects (less frequent for better performance)
+        // Periodic fireworks (less frequent on mobile)
         setInterval(() => {
-            if (Math.random() < 0.3) {
-                launchRandomFirework();
+            if (Math.random() < (isMobile ? 0.2 : 0.3)) {
+                launchFirework();
             }
-        }, 3000);
+        }, isMobile ? 3000 : 2000);
         
+        // Periodic hearts
         setInterval(() => {
-            if (Math.random() < 0.2) {
-                createRandomHeart();
+            if (Math.random() < 0.15) {
+                const x = Math.random() * canvas.width;
+                const y = canvas.height + 20;
+                createHeart(x, y);
             }
-        }, 4000);
+        }, 2500);
+        
+        // Show polaroids with animation
+        function showPolaroids() {
+            const polaroids = document.querySelectorAll('.polaroid');
+            polaroids.forEach((polaroid, index) => {
+                setTimeout(() => {
+                    polaroid.classList.add('show');
+                }, index * 100);
+            });
+        }
+        
+        // Initialize polaroids
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(showPolaroids, 500);
+        });
         
         // Modal controls
         const readMessageBtn = document.getElementById('readMessageBtn');
@@ -684,17 +727,19 @@
             modalOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
             
-            // Create a few effects when opening the letter
-            for (let i = 0; i < 3; i++) {
+            // Create special effects when opening letter
+            for (let i = 0; i < 5; i++) {
                 setTimeout(() => {
-                    launchRandomFirework();
-                }, i * 300);
+                    launchFirework();
+                }, i * 200);
             }
             
-            for (let i = 0; i < 2; i++) {
+            for (let i = 0; i < 3; i++) {
                 setTimeout(() => {
-                    createRandomHeart();
-                }, i * 400);
+                    const x = canvas.width / 2;
+                    const y = canvas.height / 2;
+                    createHeart(x, y);
+                }, i * 300);
             }
         });
         
@@ -722,29 +767,6 @@
         // Touch event for mobile
         document.addEventListener('touchstart', () => {
             // Optional: add subtle touch feedback
-        });
-        
-        // Show polaroids with animation
-        function showPolaroids() {
-            const polaroids = document.querySelectorAll('.polaroid');
-            polaroids.forEach((polaroid, index) => {
-                setTimeout(() => {
-                    polaroid.style.opacity = '1';
-                    polaroid.style.transform = 'translateY(0)';
-                }, index * 100);
-            });
-        }
-        
-        // Initialize polaroids with hidden state
-        document.addEventListener('DOMContentLoaded', () => {
-            const polaroids = document.querySelectorAll('.polaroid');
-            polaroids.forEach(polaroid => {
-                polaroid.style.opacity = '0';
-                polaroid.style.transform = 'translateY(20px)';
-                polaroid.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            });
-            
-            setTimeout(showPolaroids, 300);
         });
     </script>
 </body>
