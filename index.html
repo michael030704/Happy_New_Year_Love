@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy New Year, My Love</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -18,7 +18,7 @@
             color: #fff;
             min-height: 100vh;
             overflow-x: hidden;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -86,19 +86,21 @@
             margin-right: auto;
         }
         
-        /* Polaroid Photos Grid - FIXED FOR MOBILE */
+        /* SIMPLE FLEXBOX LAYOUT for Messenger compatibility */
         .polaroid-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
             margin: 1.5rem auto;
             max-width: 600px;
         }
         
+        /* Each polaroid takes up 1/3 of the container minus gaps */
         .polaroid {
-            position: relative;
+            flex: 0 0 calc(33.333% - 10px);
             background: white;
-            padding: 10px 10px 35px;
+            padding: 8px 8px 30px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
             height: 180px;
@@ -323,34 +325,33 @@
             font-weight: 600;
         }
         
-        /* MOBILE-FIXED RESPONSIVE STYLES */
-        /* For tablets and smaller desktops */
+        /* MOBILE FIXES - Works in Messenger */
         @media (max-width: 768px) {
             body {
-                padding: 15px;
+                padding: 10px;
             }
             
             .container {
-                padding: 1.2rem;
+                padding: 1rem;
             }
             
             h1 {
-                font-size: 2.2rem;
+                font-size: 2rem;
             }
             
             .year {
-                font-size: 3rem;
+                font-size: 2.8rem;
             }
             
-            .polaroid-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 0.8rem;
-                max-width: 100%;
+            .message {
+                font-size: 1rem;
             }
             
+            /* FIX FOR MESSENGER: Use simple flexbox with fixed percentage */
             .polaroid {
+                flex: 0 0 calc(33.333% - 10px);
                 height: 160px;
-                padding: 8px 8px 30px;
+                min-width: 0; /* Important for flexbox in Messenger */
             }
             
             .polaroid-image {
@@ -362,35 +363,11 @@
             }
         }
         
-        /* For mobile phones */
         @media (max-width: 480px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .year {
-                font-size: 2.5rem;
-            }
-            
-            .message {
-                font-size: 1rem;
-            }
-            
-            /* FIXED: This ensures photos don't overlap on mobile */
-            .polaroid-grid {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-                gap: 0.6rem;
-                width: 100%;
-            }
-            
             .polaroid {
+                flex: 0 0 calc(33.333% - 8px);
                 height: 140px;
                 padding: 6px 6px 25px;
-                width: 100%;
             }
             
             .polaroid-image {
@@ -402,28 +379,31 @@
                 margin-top: 5px;
             }
             
-            .read-message-btn {
-                padding: 0.7rem 1.5rem;
-                font-size: 0.9rem;
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .year {
+                font-size: 2.5rem;
             }
         }
         
-        /* For very small phones */
+        /* Extra small phones */
         @media (max-width: 360px) {
             .polaroid {
+                flex: 0 0 calc(33.333% - 6px);
                 height: 130px;
             }
             
             .polaroid-image {
                 height: 85px;
             }
-            
-            h1 {
-                font-size: 1.6rem;
-            }
-            
-            .year {
-                font-size: 2.2rem;
+        }
+        
+        /* Fix for iOS Messenger */
+        @supports (-webkit-touch-callout: none) {
+            .polaroid {
+                flex-shrink: 0;
             }
         }
     </style>
@@ -437,7 +417,7 @@
         <h1>Happy New Year, My Love</h1>
         <div class="year" id="currentYear">2025</div>
         
-        <!-- Polaroid Photos Grid - NOW FIXED FOR MOBILE -->
+        <!-- Polaroid Photos Grid - Now using flexbox for better compatibility -->
         <div class="polaroid-grid">
             <!-- Polaroid 1 -->
             <div class="polaroid" id="polaroid1">
@@ -543,7 +523,7 @@
 
     <script>
         // ====================
-        // OPTIMIZED FIREWORKS
+        // SIMPLE FIREWORKS (Works everywhere)
         // ====================
         
         // Get canvas and context
@@ -564,13 +544,13 @@
         const currentYear = new Date().getFullYear() + 1;
         currentYearElement.textContent = currentYear;
         
-        // Check if mobile for performance tuning
+        // Check if mobile
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         
         // Arrays for particles
         let particles = [];
         
-        // Romantic colors for fireworks
+        // Romantic colors
         const romanticColors = ['#ff69b4', '#ff1493', '#ff6bc9', '#ff8ed4'];
         
         // Simple Particle class
@@ -582,7 +562,7 @@
                 this.size = Math.random() * 2 + 1;
                 this.speedX = Math.random() * 3 - 1.5;
                 this.speedY = Math.random() * 3 - 1.5;
-                this.life = 50 + Math.random() * 50;
+                this.life = 50;
             }
             
             update() {
@@ -595,7 +575,7 @@
             
             draw() {
                 ctx.save();
-                ctx.globalAlpha = this.life / 100;
+                ctx.globalAlpha = this.life / 50;
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -604,22 +584,17 @@
             }
         }
         
-        // Create a firework explosion
+        // Create fireworks
         function createFirework(x, y) {
             const color = romanticColors[Math.floor(Math.random() * romanticColors.length)];
-            const particleCount = isMobile ? 30 : 50;
+            const particleCount = isMobile ? 20 : 40;
             
             for (let i = 0; i < particleCount; i++) {
                 particles.push(new Particle(x, y, color));
             }
-            
-            // Create a heart sometimes (30% chance)
-            if (Math.random() < 0.3) {
-                createHeart(x, y);
-            }
         }
         
-        // Create floating hearts
+        // Create hearts
         function createHeart(x, y) {
             const heart = document.createElement('div');
             heart.className = 'heart';
@@ -634,18 +609,14 @@
             // Animation
             let opacity = 1;
             let posY = y;
-            let posX = x;
-            const speedY = -1 - Math.random() * 1;
-            const speedX = (Math.random() - 0.5) * 1;
+            const speedY = -1;
             
             function animateHeart() {
                 opacity -= 0.01;
                 posY += speedY;
-                posX += speedX;
                 
                 heart.style.opacity = opacity;
                 heart.style.top = posY + 'px';
-                heart.style.left = posX + 'px';
                 
                 if (opacity > 0) {
                     requestAnimationFrame(animateHeart);
@@ -678,7 +649,7 @@
         // Start animation
         animate();
         
-        // Launch fireworks at random positions
+        // Launch fireworks
         function launchFirework() {
             const x = Math.random() * canvas.width;
             const y = Math.random() * canvas.height * 0.7;
@@ -692,12 +663,12 @@
             }
         }, 1000);
         
-        // Periodic fireworks (less frequent on mobile)
+        // Periodic fireworks
         setInterval(() => {
-            if (Math.random() < (isMobile ? 0.2 : 0.3)) {
+            if (Math.random() < 0.2) {
                 launchFirework();
             }
-        }, isMobile ? 3000 : 2000);
+        }, 3000);
         
         // Periodic hearts
         setInterval(() => {
@@ -718,9 +689,18 @@
             });
         }
         
-        // Initialize polaroids
+        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(showPolaroids, 500);
+            
+            // Initial hearts
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    createHeart(x, y);
+                }, i * 700);
+            }
         });
         
         // Modal controls
@@ -732,18 +712,14 @@
             modalOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
             
-            // Create special effects when opening letter
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => {
-                    launchFirework();
-                }, i * 200);
+            // Special effects when opening letter
+            for (let i = 0; i < 4; i++) {
+                setTimeout(launchFirework, i * 250);
             }
             
             for (let i = 0; i < 3; i++) {
                 setTimeout(() => {
-                    const x = canvas.width / 2;
-                    const y = canvas.height / 2;
-                    createHeart(x, y);
+                    createHeart(canvas.width / 2, canvas.height / 2);
                 }, i * 300);
             }
         });
@@ -753,7 +729,6 @@
             document.body.style.overflow = 'auto';
         });
         
-        // Close modal when clicking outside
         modalOverlay.addEventListener('click', (e) => {
             if (e.target === modalOverlay) {
                 modalOverlay.classList.remove('active');
@@ -761,7 +736,6 @@
             }
         });
         
-        // Close modal with Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
                 modalOverlay.classList.remove('active');
